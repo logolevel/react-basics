@@ -82,6 +82,7 @@ ReactDom.render(<App title="React Todo" />, document.getElementById('root'));
 ```
 
 <p>Чтобы указать значение свойства в компоненте, нужно использовать JSX выражение</p>
+
 ```javascript
 <h1>{props.title}</h1>
 ```

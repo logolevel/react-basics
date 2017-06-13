@@ -4,14 +4,41 @@ import ReactDom from 'react-dom';
 
 function App() {
     return (
-        <div>
-            <h1>React Todo</h1>
-            <p className="subtitle">Это первое приложение на React</p>
-        </div>
+        <main>
+            <header>
+                <h1>React Todo</h1>
+            </header>
+
+            <section className="todo-list">
+                <div className="todo completed">
+                    <button className="checkbox icon">
+                        <i className="material-icons">check_box</i>
+                    </button>
+
+                    <span className="todo-title">Изучить JavaScript</span>
+                    
+                    <button className="delete icon">
+                        <i className="material-icons">delete</i>
+                    </button>
+                </div>
+
+                <div className="todo">
+                    <button className="checkbox icon">
+                        <i className="material-icons">check_box_outline_blank</i>
+                    </button>
+
+                    <span className="todo-title">Изучить React</span>
+                    
+                    <button className="delete icon">
+                        <i className="material-icons">delete</i>
+                    </button>
+                </div>
+            </section>
+        </main>
     );
 }
 
-ReactDom.render(React.createElement(App), document.getElementById('root'));
+ReactDom.render(<App />, document.getElementById('root'));
 
 
 

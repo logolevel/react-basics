@@ -96,7 +96,7 @@ App.propTypes = {
 }
 ```
 
-<p><code>React</code>-испортируемы объект, <code>PropTypes</code>-метод, определяющий тип у переменной, <code>string</code>-определяемый тип должен быть строкой, <code>isRequired</code>-свойство должно иметь какое-то значение, иначе выдаст предупреждение в консоль.</p>
+<p><code>React</code>-экспортируемый объект, <code>PropTypes</code>-метод, определяющий тип у переменной, <code>string</code>-определяемый тип должен быть строкой, <code>isRequired</code>-свойство должно иметь какое-то значение, иначе выдаст предупреждение в консоль.</p>
 
 ```javascript
 App.defaultProps = {
@@ -104,4 +104,46 @@ App.defaultProps = {
 }
 ```
 
-<p>Свойство <code>defaultProps</code> у нашего компонента задаёт значение по умолчанию для переменных нашем компоненте</p>
+<p>Свойство <code>defaultProps</code> у нашего компонента задаёт значение по умолчанию для переменных в нашем компоненте</p>
+<h3>2.4 Композиция</h3>
+<p>Компонент необходимо разделить на несколько маленьких , которые удобнее использовать и при необходимости повторно использовать. Компоненты обычно хранят в папке <code>src/components</code> и называются с большой буквы <code>src/components/Header.jsx</code>. В каждом файле необходимо импортировать объект React <code>import React from 'react';</code></p>
+<p>Чтобы компонент можно было использовать в главном компоненте, его необходимо экспортировать.В конце файла Header.jsx пропишем:</p>
+<pre><code>export default Header;</code></pre>
+<p>В главном файле компонент необходимо импортировать, после испорта объектов React и React.Dom, импортируем компонент из файла Header.jsx<code>import Header from '.components/Header';</code></p>
+<p>И наконец вставляем в нужное место главного компонента наш компонент:<code><Header title={props.title} /></code></p>
+<p>Чтобы создать динамический компонент нужно:<br/>1.Компоненту Todo добавить свойство <code>completed</code></p>
+
+```javascript
+<Todo title={"Изучить JavaScript"} completed={true} />
+<Todo title={"Изучить React"} completed={false} />
+```
+
+<p>и определить ему булевое значение:</p>
+
+```javascript
+Todo.propTypes = {
+    title: React.PropTypes.string.isRequired,
+    completed: React.PropTypes.bool.isRequired
+}
+```
+
+<p>Далее нужно пеедать это значение компоненту Checkbox:</p>
+
+```javascript
+<Checkbox checked={props.completed} />
+```
+
+<p>Подобно можно проделать и с css классами, которые также являются свойствами компонента.<br/>В компонете Button укажем свойство <code>className</code></p>
+
+```javascript
+Button.propTypes = {
+    className: React.PropTypes.string,
+    icon: React.PropTypes.string
+}
+```
+
+<p>А уже в компонете Todo вызовем это свойство со значениями:</p>
+
+```javascript
+<Button className="delete icon" icon={"delete"} />
+```

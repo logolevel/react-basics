@@ -156,7 +156,7 @@ Button.propTypes = {
 <i className="material-icons">{props.checked ? 'check_box' : 'check_box_outline_blank'}</i>
 ```
 
-<p>Если значение <code>checked=true</code>, то примит значение: <code>'check_box'</code>, а если false, то: <code>'check_box_outline_blank'</code><br/>Чтобы присвоить класс в зависимости от условия, необходимо также воспользоваться тернарныйм оператором:</p>
+<p>Если значение <code>checked=true</code>, то примет значение: <code>'check_box'</code>, а если false, то: <code>'check_box_outline_blank'</code><br/>Чтобы присвоить класс в зависимости от условия, необходимо также воспользоваться тернарным оператором:</p>
 
 ```javascript
 <div className={`todo${props.completed ? ' completed' : ''}`}>
@@ -206,4 +206,40 @@ ReactDom.render(<App todos={todos} />, document.getElementById('root'));
 </section>
 ```
 
-<p>Для более быстрого перебора и эффективной работы с массивом, у каждого его значения обязано быть значение <code></code></p>
+<p>Для более быстрого перебора и эффективной работы с массивом, у каждого его значения обязано быть значение <code>key</code></p>
+
+<h3>2.6 Состояние</h3>
+<p>Чтобы добавить интерактивности компоненту необходимо добавить состояние. Состояние - это данные, которые могут изменяться. Данные записывают в переменные, которые храняться в объекте <code>state</code>. Для того, чтобы у компонета было состояние, его необходимо создать не как функцию, а как объект, а точнее как <code>класс</code>, на основе которого и будут созданы компоненты с состоянием. Для создания класса для чекбокса, заменим строку:</p>
+
+```javascript
+function Checkbox(props) {...}
+```
+
+<p>в которой класс Checkbox будет наследовать у класса Component, находящегося в объекте React. И вызвать метод <code>render</code> в который поместить инструкцию <code>return</code>. Для доступа к объекту <code>props</code> - необходимо добавить <code>this</code></p>
+
+```javascript
+class Checkbox extends React.Component {
+    render() {
+        return (
+        <button className="checkbox icon">
+            <i className="material-icons">{this.state.checked ? 'check_box' : 'check_box_outline_blank'}</i>
+        </button>
+        );
+    }
+}
+```
+
+<p>Чтобы добавить состояние, классу необходимо добавить конструктор. Обязательно вызовем метод <code>super</code>. И конструктору добавим свойство <code>state</code>, которому присвоем объект. Это объект и есть состояние компонента. В это объект мы может поместить значение.<p>
+
+```javascript
+constructor() {
+    super();
+
+    this.state = {
+        checked: false
+    };
+}
+```
+
+<p>Удаляем статичести, созданные свойства при вызове <code><Checkbox /></code> и также свойство <code>propTypes</code> у компонента <code>Checkbox.jsx</code></p>
+<p>Компоненты, созданные как класс имеют больше возможностей, чем функциональные компоненты, но для простоты изначально создаются функциональные компоненты и потом при необходимости из переделываю в класс.</p>

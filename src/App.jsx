@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
+
+import todos from './todos';
 import Header from './components/Header';
 import Todo from './components/Todo';
 
@@ -12,26 +14,25 @@ function App(props) {
             <Header title={props.title} />
 
             <section className="todo-list">
-
-                <Todo title={"Изучить JavaScript"} completed={true} />
-                <Todo title={"Изучить React"} completed={false} />
-
+                { props.todos.map( todos => 
+                    <Todo key={todos.id} title={todos.title} completed={todos.completed} />)
+                }
             </section>
         </main>
     );
 }
 
 App.propTypes = {
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    todos: React.PropTypes.arrayOf(React.PropTypes.shape({
+        id: React.PropTypes.number.isRequired,
+        title: React.PropTypes.string.isRequired,
+        completed: React.PropTypes.bool.isRequred
+    })).isRequired
 }
 
 App.defaultProps = {
     title: 'React Todo Default'
 }
 
-ReactDom.render(<App title="React Todo" />, document.getElementById('root'));
-
-
-
-
-
+ReactDom.render(<App todos={todos} />, document.getElementById('root'));

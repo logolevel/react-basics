@@ -110,7 +110,8 @@ App.defaultProps = {
 <p>Чтобы компонент можно было использовать в главном компоненте, его необходимо экспортировать.В конце файла Header.jsx пропишем:</p>
 <pre><code>export default Header;</code></pre>
 <p>В главном файле компонент необходимо импортировать, после испорта объектов React и React.Dom, импортируем компонент из файла Header.jsx<code>import Header from '.components/Header';</code></p>
-<p>И наконец вставляем в нужное место главного компонента наш компонент:<code><Header title={props.title} /></code></p>
+<p>И наконец вставляем в нужное место главного компонента наш компонент:</p>
+<pre><code><Header title={props.title} /></code></pre>
 <p>Чтобы создать динамический компонент нужно:<br/>1.Компоненту Todo добавить свойство <code>completed</code></p>
 
 ```javascript
@@ -147,3 +148,62 @@ Button.propTypes = {
 ```javascript
 <Button className="delete icon" icon={"delete"} />
 ```
+
+<h3>2.5 Особенности JSX</h3>
+<p>Использовать конструкцию <code>if</code> в JSX - нельзя, т.к. она не является выражением, но можно использовать тернарный оператор:</p>
+
+```javascript
+<i className="material-icons">{props.checked ? 'check_box' : 'check_box_outline_blank'}</i>
+```
+
+<p>Если значение <code>checked=true</code>, то примит значение: <code>'check_box'</code>, а если false, то: <code>'check_box_outline_blank'</code><br/>Чтобы присвоить класс в зависимости от условия, необходимо также воспользоваться тернарныйм оператором:</p>
+
+```javascript
+<div className={`todo${props.completed ? ' completed' : ''}`}>
+```
+
+<p>Значение <code>completed</code> получает булево значение при вызове <code><Todo title={"Изучить JavaScript"} completed={true} /></code></p>
+<p>Информацию о всех задачах необходимо поместить в массив объектов и для каждого элемента массива создать компонент todo. Выглядит так:</p>
+
+```javascript
+const todos = [
+    {
+        id: 1,
+        title: 'Изучить JavaScript',
+        completed: true
+    },
+    ...
+]
+```
+
+<p>Для удобства массив вынесем в отдельный файл<code>todos.js</code> и экспортируем содержимое <code>export default todos;</code> и импортируем в файле App.jsx <code>import todos from './todos';</code></p>
+<p>Добавим компоненту App свойство todos и для удобства разработки определим им обязательные значения:</p>
+
+```javascript
+App.propTypes = {
+    title: React.PropTypes.string,
+    todos: React.PropTypes.arrayOf(React.PropTypes.shape({
+        id: React.PropTypes.number.isRequired,
+        title: React.PropTypes.string.isRequired,
+        completed: React.PropTypes.bool.isRequred
+    })).isRequired
+}
+```
+
+<p>Вызовем компонент App с параметром:</p>
+
+```javascript
+ReactDom.render(<App todos={todos} />, document.getElementById('root'));
+```
+
+<p>Для перебора в главной функции компонента App значений массива использовать цикл <code>for</code> нельзя, т.к. это не выражение. Подойдёт один из методов объекта Array - <code>map</code></p>
+
+```javascript
+<section className="todo-list">
+    { props.todos.map( todos => 
+        <Todo key={todos.id} title={todos.title} completed={todos.completed} />)
+    }
+</section>
+```
+
+<p>Для более быстрого перебора и эффективной работы с массивом, у каждого его значения обязано быть значение <code></code></p>

@@ -243,3 +243,77 @@ constructor() {
 
 <p>Удаляем статичести, созданные свойства при вызове <code><Checkbox /></code> и также свойство <code>propTypes</code> у компонента <code>Checkbox.jsx</code></p>
 <p>Компоненты, созданные как класс имеют больше возможностей, чем функциональные компоненты, но для простоты изначально создаются функциональные компоненты и потом при необходимости из переделываю в класс.</p>
+<h3>2.7 Изменение состояния</h3>
+<p>При нажатии пользователя на чекбокс, его состояние должно измениться. Для начала создадим обработчик события в классе Checkbox(после constructor() и перед render()). В обработчике с помощью метода setState изменим состояние checked на противоположное.</p>
+
+```javascript
+    handleClick(event) {
+        this.setState({
+            checked: !this.state.checked
+        });
+    }
+```
+
+<p>Далее в методе render() кнопке button добавим это событие, передав ссылку на метод <code>handleClick()</code></p>
+
+```javascript
+<button className="checkbox icon" onClick={ this.handleClick }>
+```
+
+<p>Чтобы не потерять метод <code>this</code> в constructor() присвоим значение:</p>
+
+```javascript
+this.handleClick = this.handleClick.bind(this);
+```
+
+<p>Чтобы начальные значения брались из базы, создадим начальное свойство и запишем его в propTypes</p>
+
+```javascript
+Checkbox.propTypes = { initiallyChecked: React.PropTypes.bool.isRequired };
+```
+
+<p>В конструкторе запишем это состояние</p>
+
+```javascript
+this.state = { checked: this.props.initiallyChecked };
+```
+
+<p>В компоненте Todo передадим это свойство</p>
+
+```javascript
+<Checkbox initiallyChecked={props.completed} />
+```
+
+<p>Чтобы достучаться к свойству initiallyChecked, добавим конструктору аргумент props. Компонет Checkbox будет выглядить так:</p>
+
+```javascript
+class Checkbox extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            checked: this.props.initiallyChecked
+        };
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
+        this.setState({
+            checked: !this.state.checked
+        });
+    }
+
+    render() {
+        return (
+        <button className="checkbox icon" onClick={ this.handleClick }>
+            <i className="material-icons">{this.state.checked ? 'check_box' : 'check_box_outline_blank'}</i>
+        </button>
+        );
+    }
+}
+
+Checkbox.propTypes = {
+    initiallyChecked: React.PropTypes.bool.isRequired
+};
+```

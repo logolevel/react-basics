@@ -317,3 +317,75 @@ Checkbox.propTypes = {
     initiallyChecked: React.PropTypes.bool.isRequired
 };
 ```
+
+<h2>3. Поток данных</h2>
+<h3>3.1 Однонаправленный поток данных</h3>
+<p>Состояния деляться на два вида:<br/>-состояние компонента - это его внутренние данные, необходимые для его правильного функционирования(например чекбокс отмечен или не отмечен)<br/>-состояние приложения - это основные данные, которые отображаются и изменяются(например список задач)</p>
+<p>Согласно принципу, состояние необходимо поместить как можно выше в иерархии компонентов</p>
+<p>Однонаправленный поток данных - сверху вниз передаются свойства, а снизу вверх передаются события</p>
+<h3>3.2 Реструктуризация состояния</h3>
+<p>Переделаем компонент Checkbox в обычный функциональный.</p>
+
+```javascript
+function Checkbox(props) {
+    return (
+        <button className="checkbox icon">
+            <i className="material-icons">{props.checked ? 'check_box' : 'check_box_outline_blank'}</i>
+        </button>
+    );
+}
+
+Checkbox.propTypes = {
+    checked: React.PropTypes.bool.isRequired
+};
+```
+
+<p>Меняем название свойства в компоненте Todo</p>
+
+```javascript
+<Checkbox checked={props.completed} />
+```
+
+<p>Укажем состояние для главного компонента App</p>
+
+```javascript
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            todos: this.props.initialData
+        };
+    }
+
+    render() {
+        return (
+            <main>
+                <Header title={this.props.title} />
+
+                <section className="todo-list">
+                    { this.state.todos.map( todos => 
+                        <Todo key={todos.id} title={todos.title} completed={todos.completed} />)
+                    }
+                </section>
+            </main>
+        );
+    }
+}
+
+
+App.propTypes = {
+    title: React.PropTypes.string,
+    initialData: React.PropTypes.arrayOf(React.PropTypes.shape({
+        id: React.PropTypes.number.isRequired,
+        title: React.PropTypes.string.isRequired,
+        completed: React.PropTypes.bool.isRequred
+    })).isRequired
+}
+
+App.defaultProps = {
+    title: 'React Todo Default'
+}
+
+ReactDom.render(<App initialData={todos} />, document.getElementById('root'));
+```

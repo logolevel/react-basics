@@ -7,24 +7,34 @@ import Header from './components/Header';
 import Todo from './components/Todo';
 
 
-function App(props) {
-    return (
-        <main>
-            
-            <Header title={props.title} />
+class App extends React.Component {
+    constructor(props) {
+        super(props);
 
-            <section className="todo-list">
-                { props.todos.map( todos => 
-                    <Todo key={todos.id} title={todos.title} completed={todos.completed} />)
-                }
-            </section>
-        </main>
-    );
+        this.state = {
+            todos: this.props.initialData
+        };
+    }
+
+    render() {
+        return (
+            <main>
+                <Header title={this.props.title} />
+
+                <section className="todo-list">
+                    { this.state.todos.map( todos => 
+                        <Todo key={todos.id} title={todos.title} completed={todos.completed} />)
+                    }
+                </section>
+            </main>
+        );
+    }
 }
+
 
 App.propTypes = {
     title: React.PropTypes.string,
-    todos: React.PropTypes.arrayOf(React.PropTypes.shape({
+    initialData: React.PropTypes.arrayOf(React.PropTypes.shape({
         id: React.PropTypes.number.isRequired,
         title: React.PropTypes.string.isRequired,
         completed: React.PropTypes.bool.isRequred
@@ -35,4 +45,4 @@ App.defaultProps = {
     title: 'React Todo Default'
 }
 
-ReactDom.render(<App todos={todos} />, document.getElementById('root'));
+ReactDom.render(<App initialData={todos} />, document.getElementById('root'));
